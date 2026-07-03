@@ -1,0 +1,162 @@
+<div class="list-container">
+  <!-- Header Section -->
+  <div class="list-header">
+    <div class="header-left">
+      <h1>Inventory Dashboard</h1>
+      <p class="subtitle">Real-time status of your store products</p>
+    </div>
+    <a routerLink="/products/add" class="btn-add">
+      <i class="bi bi-plus-lg"></i> Add Product
+    </a>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="controls-card">
+    <div class="search-box">
+      <i class="bi bi-search search-icon"></i>
+      <input
+        type="text"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+        placeholder="Search products by name, supplier, category..."
+      />
+    </div>
+
+    <div class="filter-box">
+      <i class="bi bi-filter filter-icon"></i>
+      <select
+        [ngModel]="selectedCategory()"
+        (ngModelChange)="selectedCategory.set($event)"
+      >
+        <option value="">All Categories</option>
+        @for (category of categories(); track category) {
+          <option [value]="category">{{ category }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loader-overlay">
+      <div class="spinner"></div>
+      <p>Refreshing inventory database...</p>
+    </div>
+  } @else {
+    <!-- Empty State -->
+    @if (filteredProducts().length === 0) {
+      <div class="empty-state">
+        <i class="bi bi-inbox empty-icon"></i>
+        <h3>No Products Found</h3>
+        <p>There are no products matching your search criteria or the database is currently empty.</p>
+        @if (products().length === 0) {
+          <a routerLink="/products/add" class="btn-add mt-3">Add Your First Product</a>
+        }
+      </div>
+    } @else {
+      <!-- Desktop Table (Visible on medium screens and larger) -->
+      <div class="table-responsive-desktop">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Supplier</th>
+              <th class="text-right">Price</th>
+              <th class="text-center">Stock</th>
+              <th class="text-center">Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (product of filteredProducts(); track product.id) {
+              <tr>
+                <td class="product-name-cell">
+                  <div class="product-avatar">{{ product.productName.substring(0, 2).toUpperCase() }}</div>
+                  <span>{{ product.productName }}</span>
+                </td>
+                <td><span class="badge badge-category">{{ product.category }}</span></td>
+                <td><span class="supplier-name">{{ product.supplier }}</span></td>
+                <td class="text-right price-val">{{ product.price | currency:'USD':'symbol':'1.2-2' }}</td>
+                <td class="text-center quantity-val">{{ product.quantity }}</td>
+                <td class="text-center">
+                  @if (product.quantity === 0) {
+                    <span class="status-indicator out-of-stock">Out of Stock</span>
+                  } @else if (product.quantity <= 5) {
+                    <span class="status-indicator low-stock">Low Stock</span>
+                  } @else {
+                    <span class="status-indicator in-stock">In Stock</span>
+                  }
+                </td>
+                <td class="text-center">
+                  <div class="action-buttons">
+                    <a [routerLink]="['/products/edit', product.id]" class="btn-action btn-edit" title="Edit Product">
+                      <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <button (click)="confirmDelete(product)" class="btn-action btn-delete" title="Delete Product">
+                      <i class="bi bi-trash3-fill"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Cards Grid (Visible on small screens) -->
+      <div class="cards-grid-mobile">
+        @for (product of filteredProducts(); track product.id) {
+          <div class="product-card">
+            <div class="card-header">
+              <div class="card-title-row">
+                <h3>{{ product.productName }}</h3>
+                <span class="badge badge-category">{{ product.category }}</span>
+              </div>
+              <span class="supplier-text">Supplier: {{ product.supplier }}</span>
+            </div>
+
+            <div class="card-body">
+              <div class="info-row">
+                <span class="info-label">Price:</span>
+                <span class="info-value price-val">{{ product.price | currency:'USD':'symbol':'1.2-2' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Quantity:</span>
+                <span class="info-value quantity-val">{{ product.quantity }}</span>
+              </div>
+              <div class="info-row align-items-center">
+                <span class="info-label">Status:</span>
+                @if (product.quantity === 0) {
+                  <span class="status-indicator out-of-stock">Out of Stock</span>
+                } @else if (product.quantity <= 5) {
+                  <span class="status-indicator low-stock">Low Stock</span>
+                } @else {
+                  <span class="status-indicator in-stock">In Stock</span>
+                }
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <a [routerLink]="['/products/edit', product.id]" class="btn-card-action btn-card-edit">
+                <i class="bi bi-pencil-square"></i> Edit
+              </a>
+              <button (click)="confirmDelete(product)" class="btn-card-action btn-card-delete">
+                <i class="bi bi-trash3-fill"></i> Delete
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
+
+<!-- Custom Confirmation Dialog Modal overlay -->
+@if (showDeleteDialog()) {
+  <app-confirm-dialog
+    [title]="'Delete Product'"
+    [message]="'Are you sure you want to delete \'' + (productToDelete()?.productName || 'this product') + '\'? This action cannot be undone.'"
+    (confirmed)="onDeleteConfirm($event)"
+  ></app-confirm-dialog>
+}

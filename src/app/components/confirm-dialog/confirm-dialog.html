@@ -1,0 +1,15 @@
+<!-- Modal overlay backdrop -->
+<div class="dialog-backdrop" (click)="onCancel()">
+  <!-- Dialog box (stop propagation so clicking inside doesn't close) -->
+  <div class="dialog-box" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <i class="bi bi-exclamation-triangle-fill dialog-warning-icon"></i>
+      <h3>{{ title() }}</h3>
+    </div>
+    <p class="dialog-message">{{ message() }}</p>
+    <div class="dialog-actions">
+      <button class="btn-cancel" (click)="onCancel()">Cancel</button>
+      <button class="btn-confirm" (click)="onConfirm()">Delete</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<!-- Premium Navigation Header -->
+<header class="app-header">
+  <div class="header-container">
+    <a routerLink="/" class="app-logo">
+      <div class="logo-icon">
+        <i class="bi bi-box-fill"></i>
+      </div>
+      <div class="logo-text">
+        <span class="logo-title">InventoryManager</span>
+        <span class="logo-version">v1.0</span>
+      </div>
+    </a>
+
+    <nav class="app-nav">
+      <a routerLink="/products" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+        <i class="bi bi-grid-1x2-fill"></i>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/products/add" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-plus-circle-fill"></i>
+        <span>Add Product</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- Main Dashboard Container -->
+<main class="app-main">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Global Notifications Overlay -->
+<app-toast></app-toast>
