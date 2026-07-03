@@ -1,13 +1,12 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'AIzaSyBhN-bpoWV6CX7X0oNMNSBiAdLt3RcYG1o',
-    authDomain: 'angular-typescript-test-e031a.firebaseapp.com',
-    databaseURL: 'https://angular-typescript-test-e031a-default-rtdb.firebaseio.com',
-    projectId: 'angular-typescript-test-e031a',
-    storageBucket: 'angular-typescript-test-e031a.firebasestorage.app',
-    messagingSenderId: '494110110925',
-    appId: '1:494110110925:web:23765866d6d83261f5e584',
-    measurementId: 'G-EDEVMGJ0XT'
+    apiKey: 'AIzaSyBV3Stmd3OTBgZsqZg0vHHOJAvk-1N_wu8',
+    authDomain: 'angular-typescript-test-c353b.firebaseapp.com',
+    projectId: 'angular-typescript-test-c353b',
+    storageBucket: 'angular-typescript-test-c353b.firebasestorage.app',
+    messagingSenderId: '867931258044',
+    appId: '1:867931258044:web:453f05cfb11fbf0365a4b9',
+    measurementId: 'G-MSXF5L1KSX'
   }
 };
